@@ -1,6 +1,6 @@
 import numpy as np
 
-from Layer import layerCreator
+from creator import layerCreator
 
 class NeuralNetwork:
     def __init__(self, architecture):

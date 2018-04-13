@@ -1,7 +1,7 @@
-from Layer import Layer
+import layer
 import numpy as np
 
-class Classic(Layer):
+class Classic(layer.ILayer):
     def __init__(self, size, activation):
         super(size)
         self.weights = np.random.rand(size[0], size[1])
