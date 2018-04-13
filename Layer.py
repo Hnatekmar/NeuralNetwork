@@ -1,3 +1,5 @@
+from ClasicLayer import Classic
+
 class Layer:
     """Abstract class that represents network layer"""
     def __init__(self, size):
@@ -9,4 +11,7 @@ class Layer:
         raise NotImplemented
 
 def layerCreator(description):
-    pass
+    size, layer, activation = description
+    if layer == "classic":
+        return Classic(size, activation)
+    raise NotImplemented # Layer type was not yet implemented
