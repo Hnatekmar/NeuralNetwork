@@ -6,7 +6,7 @@ class Relu:
         result[result > 0] = 1
         return result
 
-    def __call__(x):
+    def __call__(self, x):
         return np.maximum(0, x)
 
 class Sigmoid:
@@ -16,4 +16,4 @@ class Sigmoid:
         return (1.0 - sigmoid) * sigmoid
 
     def __call__(self, x):
-        return 1.0 / (1.0 + np.exp(-x + EPSILON))
+        return 1.0 / (1.0 + np.exp(-x + self.EPSILON))
