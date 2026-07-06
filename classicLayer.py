@@ -13,11 +13,12 @@ class Classic(layer.ILayer):
         x = np.append(x, np.ones((x.shape[0], 1)), 1)
         return self.activation(x @ self.weights)
 
-    def randomNeighbor(self):
+    def randomNeighbor(self, perturbation_ratio=0.1):
         alpha = 0.1
         shape = self.weights.shape
         # Perturb multiple random weights for faster exploration
-        num_perturbations = max(1, int(shape[0] * shape[1] * 0.3))
+        # perturbation_ratio controls what fraction of weights are perturbed per call
+        num_perturbations = max(1, int(shape[0] * shape[1] * perturbation_ratio))
         for _ in range(num_perturbations):
             i = random.randint(0, shape[0] - 1)
             j = random.randint(0, shape[1] - 1)
