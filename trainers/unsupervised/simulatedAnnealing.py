@@ -15,17 +15,15 @@ class SimulatedAnnealing:
         return math.exp((current - new) / temperature)
 
     def optimize(self, nn, fitness, verbose=False):
-        data = []
         t = 100000
         cooling = 1.0 - 0.0001
-        guess = nn
+        guess = copy.deepcopy(nn)
         score = fitness(guess)
         bestGuess = copy.deepcopy(nn)
         bestFitness = score
         epsilon = 1
         iteration = 0
         while t > epsilon:
-            data.append(score)
             neighbor = self.random_neighbor(guess)
             neighborScore = fitness(neighbor)
             if self.acceptance_probability(score, neighborScore, t) > random.random():
