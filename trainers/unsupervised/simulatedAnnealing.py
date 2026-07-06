@@ -35,5 +35,5 @@ class SimulatedAnnealing:
             t *= cooling
             iteration += 1
             if verbose and iteration % 10000 == 0:
-                print(f"  Iteration {iteration}, temperature={t:.4f}, bestFitness={bestFitness:.4f}")
+                print(f"  Iteration {iteration}, temperature={t:.4f}, score={score:.4f}, bestFitness={bestFitness:.4f}")
         return bestGuess

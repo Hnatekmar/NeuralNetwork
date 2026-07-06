@@ -20,7 +20,7 @@ def fitness(nn):
     prediction = nn.forward(inputs)
     return 4.0 - lf.mse(outputs, prediction)
 
-def test_xor(max_cycles=20):
+def test_xor(max_cycles=20, convergence_threshold=3.999):
     trainer = sa.SimulatedAnnealing()
     nn = NeuralNetwork([
         ((2, 4), "classic", Sigmoid()),
@@ -33,7 +33,7 @@ def test_xor(max_cycles=20):
         result = np.argmax(prediction, axis=1)
         current_fitness = fitness(nn)
         print(f"Cycle {cycle + 1}/{max_cycles} | Fitness: {current_fitness:.4f} | Argmax: {result}")
-        if current_fitness >= 3.999:
+        if current_fitness >= convergence_threshold:
             print("✓ Converged!")
             print(f"Final predictions:\n{np.round(prediction, 4)}")
             break
