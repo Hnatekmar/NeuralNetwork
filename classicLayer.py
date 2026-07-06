@@ -18,7 +18,10 @@ class Classic(layer.ILayer):
         shape = self.weights.shape
         # Perturb multiple random weights for faster exploration
         # perturbation_ratio controls what fraction of weights are perturbed per call
-        num_perturbations = max(1, int(shape[0] * shape[1] * perturbation_ratio))
+        n_weights = shape[0] * shape[1]
+        num_perturbations = int(n_weights * perturbation_ratio)
+        if num_perturbations == 0 and perturbation_ratio > 0:
+            num_perturbations = 1
         for _ in range(num_perturbations):
             i = random.randint(0, shape[0] - 1)
             j = random.randint(0, shape[1] - 1)
