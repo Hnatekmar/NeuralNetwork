@@ -1,43 +1,41 @@
 import copy
 import math
 import random
-import plotly
-from plotly.graph_objs import *
 
 class SimulatedAnnealing:
     def random_neighbor(self, nn):
         tmp = copy.deepcopy(nn)
-        for i in range(len(nn.layers)):
-            nn.layers[i].randomNeighbor()
-        return nn
+        for i in range(len(tmp.layers)):
+            tmp.layers[i].randomNeighbor()
+        return tmp
 
     def acceptance_probability(self, current, new, temperature):
         if new > current:
             return 1.0
         return math.exp((current - new) / temperature)
 
-    def optimize(self, nn, fitness):
+    def optimize(self, nn, fitness, verbose=False):
         data = []
         t = 100000
         cooling = 1.0 - 0.0001
         guess = nn
         score = fitness(guess)
-        bestGuess = nn
+        bestGuess = copy.deepcopy(nn)
         bestFitness = score
         epsilon = 1
+        iteration = 0
         while t > epsilon:
             data.append(score)
-            neighbor = self.random_neighbor(nn)
+            neighbor = self.random_neighbor(guess)
             neighborScore = fitness(neighbor)
             if self.acceptance_probability(score, neighborScore, t) > random.random():
                 guess = neighbor
                 score = neighborScore
                 if score > bestFitness:
                     bestFitness = score
-                    bestGuess = guess
+                    bestGuess = copy.deepcopy(guess)
             t *= cooling
-        plotly.offline.plot({
-                "data": [Scatter(y = data)],
-                "layout": Layout(title = "fitness")
-            })
+            iteration += 1
+            if verbose and iteration % 10000 == 0:
+                print(f"  Iteration {iteration}, temperature={t:.4f}, bestFitness={bestFitness:.4f}")
         return bestGuess

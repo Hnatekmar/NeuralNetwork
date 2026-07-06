@@ -20,21 +20,24 @@ def fitness(nn):
     prediction = nn.forward(inputs)
     return 4.0 - lf.mse(outputs, prediction)
 
-def test_xor():
+def test_xor(max_cycles=20):
     trainer = sa.SimulatedAnnealing()
     nn = NeuralNetwork([
-        ((2, 2), "classic", Sigmoid()),
-        ((2, 2), "classic", Sigmoid())
+        ((2, 4), "classic", Sigmoid()),
+        ((4, 2), "classic", Sigmoid())
     ])
-    # TODO: Training
-    while True:
-        nn = trainer.optimize(nn, fitness)
+    for cycle in range(max_cycles):
+        verbose = (cycle % 5 == 0)
+        nn = trainer.optimize(nn, fitness, verbose=verbose)
         prediction = nn.forward(inputs)
-        print(prediction)
         result = np.argmax(prediction, axis=1)
-        print(result)
-        if np.array_equal(result, [0, 1, 1, 0]):
+        current_fitness = fitness(nn)
+        print(f"Cycle {cycle + 1}/{max_cycles} | Fitness: {current_fitness:.4f} | Argmax: {result}")
+        if current_fitness >= 3.999:
+            print("✓ Converged!")
+            print(f"Final predictions:\n{np.round(prediction, 4)}")
             break
+    return nn
 
 if __name__ == '__main__':
-    test_xor()
+    trained_nn = test_xor()

@@ -16,5 +16,10 @@ class Classic(layer.ILayer):
     def randomNeighbor(self):
         alpha = 0.1
         shape = self.weights.shape
-        self.weights[random.randint(0, shape[0] - 1), random.randint(0, shape[1] - 1)] += (random.random() * 2.0 - 1.0) * alpha
+        # Perturb multiple random weights for faster exploration
+        num_perturbations = max(1, int(shape[0] * shape[1] * 0.3))
+        for _ in range(num_perturbations):
+            i = random.randint(0, shape[0] - 1)
+            j = random.randint(0, shape[1] - 1)
+            self.weights[i, j] += (random.random() * 2.0 - 1.0) * alpha
 
