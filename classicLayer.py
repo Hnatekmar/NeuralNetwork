@@ -26,6 +26,8 @@ class Classic(layer.ILayer):
             i = random.randint(0, shape[0] - 1)
             j = random.randint(0, shape[1] - 1)
             self.weights[i, j] += (random.random() * 2.0 - 1.0) * alpha
-        # Re-apply bias after perturbation to keep it fixed at 1
-        self.weights[0, :] = 1
+        # Note: bias row (index 0) is intentionally left mutable after perturbation.
+        # Like all other weights, biases are perturbed during neighbor generation
+        # and are NOT reset — this allows the optimizer to learn bias values
+        # rather than keeping them fixed at initialization.
 
