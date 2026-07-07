@@ -10,10 +10,10 @@ class Relu:
         return np.maximum(0, x)
 
 class Sigmoid:
-    EPSILON = 1e-25
     def derivative(self, x):
         sigmoid = self(x)
         return (1.0 - sigmoid) * sigmoid
 
     def __call__(self, x):
-        return 1.0 / (1.0 + np.exp(-x + self.EPSILON))
+        # Clip to prevent numerical overflow in exp
+        return 1.0 / (1.0 + np.exp(-np.clip(x, -100, 100)))
