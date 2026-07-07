@@ -14,7 +14,7 @@ class SimulatedAnnealing:
             return 1.0
         return math.exp((current - new) / temperature)
 
-    def optimize(self, nn, fitness, verbose=False):
+    def optimize(self, nn, fitness, verbose=False, log_interval=10000):
         t = 100000
         cooling = 1.0 - 0.0001
         guess = copy.deepcopy(nn)
@@ -34,6 +34,6 @@ class SimulatedAnnealing:
                     bestGuess = copy.deepcopy(guess)
             t *= cooling
             iteration += 1
-            if verbose and iteration % 10000 == 0:
+            if verbose and iteration % log_interval == 0:
                 print(f"  Iteration {iteration}, temperature={t:.4f}, score={score:.4f}, bestFitness={bestFitness:.4f}")
         return bestGuess

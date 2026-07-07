@@ -32,8 +32,12 @@ class Classic(layer.ILayer):
         num_perturbations = int(n_weights * perturbation_ratio)
         if num_perturbations == 0 and perturbation_ratio > 0:
             num_perturbations = 1
-        for _ in range(num_perturbations):
-            i = random.randint(0, shape[0] - 1)
-            j = random.randint(0, shape[1] - 1)
-            self.weights[i, j] += (random.random() * 2.0 - 1.0) * alpha
+        if num_perturbations > 0:
+            # Use random.sample to ensure each weight is perturbed at most once per call,
+            # preventing duplicate perturbations from reducing exploration diversity.
+            indices = random.sample(range(n_weights), min(num_perturbations, n_weights))
+            for idx in indices:
+                i = idx // shape[1]
+                j = idx % shape[1]
+                self.weights[i, j] += (random.random() * 2.0 - 1.0) * alpha
 
