@@ -23,9 +23,9 @@ class SimulatedAnnealing:
         score = fitness(guess)
         bestGuess = copy.deepcopy(nn)
         bestFitness = score
-        epsilon = 1
+        min_temperature = 1
         iteration = 0
-        while t > epsilon:
+        while t > min_temperature:
             neighbor = self.random_neighbor(guess)
             neighborScore = fitness(neighbor)
             if self.acceptance_probability(score, neighborScore, t) > random.random():
