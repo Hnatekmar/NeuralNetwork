@@ -12,7 +12,9 @@ class SimulatedAnnealing:
     def acceptance_probability(self, current, new, temperature):
         if new > current:
             return 1.0
-        return math.exp((current - new) / temperature)
+        # For maximization: probability of accepting a worse solution decreases
+        # as temperature drops. new < current => exponent negative => P in (0, 1).
+        return math.exp((new - current) / temperature)
 
     def optimize(self, nn, fitness, verbose=False, log_interval=10000):
         t = 100000
