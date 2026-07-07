@@ -14,10 +14,20 @@ class Classic(layer.ILayer):
         return self.activation(x @ self.weights)
 
     def randomNeighbor(self, perturbation_ratio=0.1):
+        """
+        Generate a neighbor state by perturbing a fraction of weights.
+
+        Each call perturbs a subset of weights (controlled by perturbation_ratio)
+        by adding a small random delta in [-alpha, alpha]. The bias row (index 0)
+        is intentionally left mutable — like all other weights, biases are perturbed
+        during neighbor generation and are NOT reset, allowing the optimizer to
+        learn bias values rather than keeping them fixed at initialization.
+
+        Args:
+            perturbation_ratio: Fraction of weights to perturb per call (default 0.1 = 10%).
+        """
         alpha = 0.1
         shape = self.weights.shape
-        # Perturb multiple random weights for faster exploration
-        # perturbation_ratio controls what fraction of weights are perturbed per call
         n_weights = shape[0] * shape[1]
         num_perturbations = int(n_weights * perturbation_ratio)
         if num_perturbations == 0 and perturbation_ratio > 0:
@@ -26,8 +36,4 @@ class Classic(layer.ILayer):
             i = random.randint(0, shape[0] - 1)
             j = random.randint(0, shape[1] - 1)
             self.weights[i, j] += (random.random() * 2.0 - 1.0) * alpha
-        # Note: bias row (index 0) is intentionally left mutable after perturbation.
-        # Like all other weights, biases are perturbed during neighbor generation
-        # and are NOT reset — this allows the optimizer to learn bias values
-        # rather than keeping them fixed at initialization.
 
